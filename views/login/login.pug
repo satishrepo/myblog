@@ -1,0 +1,9 @@
+extends ../template
+	
+block content	
+	
+	div
+		form(action="/login" name="userform" method="POST")
+			input(name="username" placeholder="Username") 
+			input(name="email" placeholder="Email") 
+			input(type="submit" name="Login") 

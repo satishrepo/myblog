@@ -1,0 +1,17 @@
+extends ../template
+	
+block content	
+	ul
+		for user in users
+			li: a(href="/users/"+user.username) #{user.username} - #{user.email} 
+			form(action="users" name="deleteuser" method="post")
+				input(type="hidden" name="email" value= user.email)
+				input(type="hidden" name="_method" value="DELETE")
+				input(type="submit" value="X") 
+	div
+		form(action="/users" name="userform" method="POST")
+			input(name="username" placeholder="Username") 
+			input(name="email" placeholder="Email") 
+			input(name="phone" placeholder="Phone") 
+			input(name="sex" placeholder="sex") 
+			input(type="submit" name="save") 
