@@ -7,7 +7,7 @@ module.exports = {
 	{
 		try
 		{
-			mongoose.model('users').find({username:username,email:email}, function(err, result)
+			mongoose.model('user').find({username:username,email:email}, function(err, result)
 			{
 				if(err)
 				{	

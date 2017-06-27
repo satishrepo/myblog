@@ -9,11 +9,11 @@ var session 	= require('express-session');
 
 
 var db = require('./database');
-var users_model = require('./api/models/users');
+var user_model = require('./api/models/user');
 
 
 var index = require('./routes/index');
-var users = require('./routes/users');
+var user = require('./routes/user');
 var login = require('./routes/login');
 
 var sess = require('./middleware/session');
@@ -47,8 +47,8 @@ app.use(session({secret:'satishpur', resave:true, saveUninitialized:true}));
 app.use(sess);
 
 app.use('/',index);
-app.use('/users',users);
-app.use('/user',users);
+app.use('/users',user);
+app.use('/user',user);
 app.use('/login',login);
 
 

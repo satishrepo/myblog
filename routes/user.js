@@ -9,7 +9,7 @@ var userController = require('../api/controllers/userController');
 router.get('/list', userController.getUsers);
 // router.get('/:username', userController.getUserDetail);
 router.get('/detail/:username', userController.getUserDetail);
-router.post('/', loginAuth, userController.saveUser);
+router.post('/',  userController.saveUser);
 router.delete('/', loginAuth, userController.removeUser);
 
 

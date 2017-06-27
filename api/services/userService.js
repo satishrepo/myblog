@@ -1,13 +1,15 @@
 var mongoose = require('mongoose');
 var logger = require('../../utils/logger');
 
+var user = mongoose.model('user');
+
 var user = {
 
 	getAllUsers : function(next)
 	{
 		try
 		{
-			mongoose.model('users').find({}, function(err, result)
+			user.find({}, function(err, result)
 			{
 				if(err)
 				{	
@@ -18,8 +20,7 @@ var user = {
 		}
 		catch(e)
 		{
-			logger.logger.log('userController-getAllUser - Error : '+e.toString());
-			logger.wlogger.log('error','userController-getAllUser - Error : '+e.toString())
+			// logger.wlogger.log('error','userController-getAllUser - Error : '+e.toString())
 			return next({status:'error', statusCode:500, data:e.toString()});
 		}
 	},
@@ -27,7 +28,7 @@ var user = {
 	{
 		try
 		{
-			mongoose.model('users').find({username:username}).populate('detail').exec(function(err, result)
+			user.find({username:username}).populate('detail').exec(function(err, result)
 			{
 				if(err)
 				{	
@@ -39,8 +40,8 @@ var user = {
 		}
 		catch(e)
 		{
-			logger.logger.log('userController-getAllUser - Error : '+e.toString());
-			logger.wlogger.log('error','userController-getAllUser - Error : '+e.toString())
+			// logger.logger.log('userController-getAllUser - Error : '+e.toString());
+			// logger.wlogger.log('error','userController-getAllUser - Error : '+e.toString())
 			return next({status:'error', statusCode:500, data:e.toString()});
 		}
 	},
@@ -53,7 +54,7 @@ var user = {
 
 		try
 		{
-			mongoose.model('users_detail').create(detailObj, function(err, result)
+			mongoose.model('user_details').create(detailObj, function(err, result)
 			{
 				if(err)
 				{
@@ -67,7 +68,7 @@ var user = {
 
 				userObj.detail = result._id;
 
-				mongoose.model('users').create(userObj, function(err, result)
+				mongoose.model('user').create(userObj, function(err, result)
 				{
 					if(err)
 					{
@@ -89,7 +90,7 @@ var user = {
 	{
 		try
 		{
-			mongoose.model('users').find({email:email}, function(err, result)
+			user.find({email:email}, function(err, result)
 			{
 				if(err)
 				{

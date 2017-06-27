@@ -84,6 +84,32 @@ var user = {
 			});
 		});
 	},
+	createUser : function(req, res)
+	{
+		var user = {
+			username : req.body.username,
+			email : req.body.email,
+		};
+
+		userService.createUser(user, function(response)
+		{
+			res.format(
+			{
+				html:function()
+				{
+					if(response.statusCode !== 200)
+					{
+						return res.render('error', {error:response.data});
+					}
+					res.redirect('/users');
+				},
+				json:function()
+				{
+					return res.json(response);
+				}
+			});
+		});
+	},
 	updateUserInfo : function(req, res)
 	{
 		var user = {
