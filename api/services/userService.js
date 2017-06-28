@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
 var logger = require('../../utils/logger');
 
-var user = mongoose.model('user');
+var userModel = mongoose.model('user');
+
 
 var user = {
 
@@ -9,7 +10,7 @@ var user = {
 	{
 		try
 		{
-			user.find({}, function(err, result)
+			userModel.find({}, function(err, result)
 			{
 				if(err)
 				{	
@@ -24,11 +25,53 @@ var user = {
 			return next({status:'error', statusCode:500, data:e.toString()});
 		}
 	},
+
+	getUserById : function(userid, next)
+	{
+		try
+		{
+			userModel.find({_id : userid}, function(err, result)
+			{
+				if(err)
+				{	
+					return next({status:'error', statusCode:500, data:err});
+				}
+				return next({status:'OK', statusCode:200, data:result});
+			});	
+		}
+		catch(e)
+		{
+			// logger.wlogger.log('error','userController-getAllUser - Error : '+e.toString())
+			return next({status:'error', statusCode:500, data:e.toString()});
+		}
+	},
+
+	userAuthentication : function(username_email, password, next)
+	{
+		try
+		{
+			userModel.find({$and: [{$or:[{username:username_email},{email:username_email}]}, {password:password}]}, function(err, result)
+			{	
+				if(err)
+				{	
+					return next({status:'error', statusCode:500, data:err});
+				}
+				
+				return next({status:'OK', statusCode:200, data:result});
+			});	
+		}
+		catch(e)
+		{
+			// logger.wlogger.log('error','userController-getAllUser - Error : '+e.toString())
+			return next({status:'error', statusCode:500, data:e.toString()});
+		}
+	},
+
 	getUserDetail : function(username, next)
 	{
 		try
 		{
-			user.find({username:username}).populate('detail').exec(function(err, result)
+			userModel.find({username:username}).populate('detail').exec(function(err, result)
 			{
 				if(err)
 				{	
@@ -45,52 +88,36 @@ var user = {
 			return next({status:'error', statusCode:500, data:e.toString()});
 		}
 	},
-	saveUser : function(userObj, detailObj, next)
+	saveUser : function(userObj, next)
 	{
-		if(typeof detailObj !== 'object')
+		if(typeof userObj !== 'object')
 		{
 			return next({status:'error', statusCode:500, data:'Please send valid user object'});
 		}
 
 		try
 		{
-			mongoose.model('user_details').create(detailObj, function(err, result)
+			mongoose.model('user').create(userObj, function(err, result)
 			{
 				if(err)
 				{
 					return next({status:'error', statusCode:500, data:err});
 				}
 
-				if(typeof userObj !== 'object')
-				{
-					return next({status:'OK', statusCode:200, data:'User saved successfully.'});
-				}
-
-				userObj.detail = result._id;
-
-				mongoose.model('user').create(userObj, function(err, result)
-				{
-					if(err)
-					{
-						return next({status:'error', statusCode:500, data:err});
-					}
-
-					return next({status:'OK', statusCode:200, data:'User saved successfully.'});
-				});
-
-				// return next({status:'OK', statusCode:200, data:'User saved successfully.'});
-			});	
+				return next({status:'OK', statusCode:200, data:result});
+			});
 		}
 		catch(e)
 		{
 			return next({status:'error', statusCode:500, data:e.toString()});
 		}
 	},
+
 	removeUser : function(email, next)
 	{
 		try
 		{
-			user.find({email:email}, function(err, result)
+			userModel.find({email:email}, function(err, result)
 			{
 				if(err)
 				{

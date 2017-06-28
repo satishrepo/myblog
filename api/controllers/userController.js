@@ -1,10 +1,102 @@
 var userService = require('../services/userService');
 
 var user = {
+
+	signUp : function(req, res)
+	{
+		res.format(
+		{ 	
+			html:function()
+			{
+				/*if(response.statusCode !== 200)
+				{
+					return res.render('error', {error:response.data});
+				}*/
+				return res.render('./user/signup', {title : 'signup'});
+			},
+			json:function()
+			{
+				return res.json({ data : 'Invalid Request'});
+			}
+		});
+	
+	},
+
+	logIn : function(req, res)
+	{ 
+		res.format(
+		{ 	
+			html:function()
+			{
+				return res.render('./user/login', {title : 'login'});
+			},
+			json:function()
+			{
+				return res.json({ data : 'Invalid Request'});
+			}
+		});
+	
+	},
+
+	userLogin : function(req, res)
+	{
+		var username_email = req.body.username;
+		var password = req.body.password;
+
+		userService.userAuthentication(username_email, password, function(response)
+		{	
+			res.format(
+			{ 	
+				html:function()
+				{
+					if(response.statusCode !== 200)
+					{
+						return res.render('error', {error:response.data});
+					}
+					if(response.data.length > 0 )
+					{
+						req.session.userid = response.data[0]._id;
+						req.session.username = response.data[0].username;
+						return res.redirect('dashboard');						
+					}
+					
+					return res.render('./user/login', {errorMessage:'Invalid Login Details.'});
+				},
+				json:function()
+				{
+					return res.json(response);
+				}
+			});
+		});
+	
+	},
+
+	getUser : function(req, res)
+	{
+		var userid = req.session.userid;
+
+		userService.getUserById(userid, function(response)
+		{	
+			res.format(
+			{ 	
+				html:function()
+				{
+					if(response.statusCode !== 200)
+					{
+						return res.render('error', {error:response.data});
+					}
+					return res.render('./user/dashboard', {user:response.data[0]});
+				},
+				json:function()
+				{
+					return res.json(response);
+				}
+			});
+		});
+	},
+
 	getUsers : function(req, res)
 	{
-		// req.headers.accept = 'application/json';
-		// console.log(req.headers);
 		userService.getAllUsers(function(response)
 		{	
 			res.format(
@@ -24,15 +116,10 @@ var user = {
 			});
 		});
 	},
+
 	getUserDetail : function(req, res)
 	{
 		var username = req.query.username || req.params.username || req.body.username;
-
-		// console.log('username', req.query);
-
-		// req.headers.accept = 'application/json';
-
-		// console.log(req.headers,req.connection.remoteAddress);
 
 		userService.getUserDetail(username, function(response)
 		{
@@ -58,14 +145,10 @@ var user = {
 		var user = {
 			username : req.body.username,
 			email : req.body.email,
+			password : req.body.password,
 		};
-
-		var detail = {
-			phone : req.body.phone,
-			sex : req.body.sex
-		};
-
-		userService.saveUser(user, detail, function(response)
+		
+		userService.saveUser(user, function(response)
 		{
 			res.format(
 			{
@@ -75,33 +158,11 @@ var user = {
 					{
 						return res.render('error', {error:response.data});
 					}
-					res.redirect('/users');
-				},
-				json:function()
-				{
-					return res.json(response);
-				}
-			});
-		});
-	},
-	createUser : function(req, res)
-	{
-		var user = {
-			username : req.body.username,
-			email : req.body.email,
-		};
 
-		userService.createUser(user, function(response)
-		{
-			res.format(
-			{
-				html:function()
-				{
-					if(response.statusCode !== 200)
-					{
-						return res.render('error', {error:response.data});
-					}
-					res.redirect('/users');
+					req.session.userid = response._id;
+					req.session.username = response.username;
+
+					res.redirect('/user/dashboard');
 				},
 				json:function()
 				{
@@ -110,6 +171,7 @@ var user = {
 			});
 		});
 	},
+	
 	updateUserInfo : function(req, res)
 	{
 		var user = {

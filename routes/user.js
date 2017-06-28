@@ -5,11 +5,13 @@ var loginAuth = require('../middleware/loginAuth');
 
 var userController = require('../api/controllers/userController');
 
-// router.get('/', userController.getUsers);
-router.get('/list', userController.getUsers);
-// router.get('/:username', userController.getUserDetail);
+router.get('/', userController.signUp);
+router.get('/signup', userController.signUp);
+router.post('/signup',  userController.saveUser);
+router.get('/login',  userController.logIn);
+router.post('/login',  userController.userLogin);
+router.get('/dashboard', loginAuth, userController.getUser);
 router.get('/detail/:username', userController.getUserDetail);
-router.post('/',  userController.saveUser);
 router.delete('/', loginAuth, userController.removeUser);
 
 
@@ -20,6 +22,12 @@ router.get('/detail/:username?', userController.getUserDetail);
 
 /********************** API Routing END ******************/
 
+
+
+router.get('*', function(req, res)
+{
+	res.render('nopage');
+});
 
 
 module.exports = router;

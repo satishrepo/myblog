@@ -1,6 +1,6 @@
 var loginAuth = function(req, res, next)
 {
-	if(req.session && req.session.username)
+	if(req.session && req.session.username && req.session.userid)
 	{
 		return next();
 	}
