@@ -10,11 +10,12 @@ var session 	= require('express-session');
 
 var db = require('./database');
 var user_model = require('./api/models/user');
+var blog_model = require('./api/models/post');
 
 
 var index = require('./routes/index');
 var user = require('./routes/user');
-var login = require('./routes/login');
+var blog = require('./routes/blog');
 
 var sess = require('./middleware/session');
 
@@ -37,7 +38,7 @@ app.use(methodOverride(function(req, res)
 }));
 
 // Static files load 
-app.use(express.static(path.join(__dirname, 'client')));
+app.use(express.static(path.join(__dirname, 'assets')));
 
 
 // session initialization
@@ -49,7 +50,7 @@ app.use(sess);
 app.use('/',index);
 app.use('/users',user);
 app.use('/user',user);
-app.use('/login',login);
+app.use('/blog',blog);
 
 
 

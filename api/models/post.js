@@ -1,10 +1,19 @@
 var mongoose = require('mongoose');
 
-var postSchema = new mongoose.schema({
+
+var commentSchema = new mongoose.Schema({
+
+	comment_by : {type: mongoose.Schema.Types.ObjectId, ref : 'user', default: ''},
+	text:{type: String, trim: true},
+	created_at: {type: String }
+});
+
+var postSchema = new mongoose.Schema({
 
 	title: {type: String, default: ''},
 	slug: {type: String, default: ''},
 	content: {type: String, default:''},
+	image: {type: String, default:'default.jpg'},
 	categories: [],
 	tags : [],
 	published: {type: Boolean, default:true},
@@ -15,12 +24,6 @@ var postSchema = new mongoose.schema({
 
 });
 
-var commentSchema = new mongoose.schema({
-
-	comment_by : {type: mongoose.Schema.Types.ObjectId, ref : 'user', default: ''},
-	text:{type: String, trim: true},
-	created_at: {type: String }
-});
 
 mongoose.model('post', postSchema);
 // mongoose.model('comments', commentSchema);
