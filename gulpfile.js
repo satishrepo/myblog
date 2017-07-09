@@ -9,7 +9,7 @@ var stylish = require('jshint-stylish');
 var minifycss = require('gulp-minify-css');
 var concat = require('gulp-concat');
 var gutil = require('gulp-util');
-// var UglifyJSPlugin = require('uglifyjs-webpack-plugin'); //uflify hack for ES6 Error
+
 
 
 var DEV_SRC = {

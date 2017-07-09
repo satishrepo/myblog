@@ -44,7 +44,10 @@ var user = {
 
 	getBlog : function(req, res)
 	{
+
 		var slug = req.params.slug;
+
+		var isLoggedIn = req.session.userid ? true : false;
 
 		blogService.getBlogBySlug(slug, function(response)
 		{	
@@ -56,7 +59,15 @@ var user = {
 					{
 						return res.render('error', {error:response.data});
 					}
-					return res.render('./blog/post', {post:response.data[0], imageUrl:'/images/uploads/'});
+					return res.render('./blog/post', 
+										{
+											post:response.data[0], 
+											pageData: {
+												imageUrl:'/images/uploads/',
+												isLoggedIn : isLoggedIn
+											}
+										}
+									);
 				},
 				json:function()
 				{
@@ -151,6 +162,37 @@ var user = {
 			  return res.render('error', {error:err});
 			});
 			
+		});
+	},
+
+
+	saveComment : function(req, res)
+	{
+		var postid = req.body.postid;
+
+		var comment = {
+			comment_by : req.session.userid,
+			text : req.body.comment
+		};
+		
+		
+		blogService.saveComment(postid, comment, function(response)
+		{
+			res.format(
+			{
+				html:function()
+				{
+					if(response.statusCode !== 200)
+					{
+						return res.render('error', {error:response.data});
+					}
+					res.redirect(req.header('referer'));
+				},
+				json:function()
+				{
+					return res.json(response);
+				}
+			});
 		});
 	},
 

@@ -12,6 +12,7 @@ router.post('/save', loginAuth, blogController.saveBlog);
 
 router.get('/:slug', blogController.getBlog);
 
+router.post('/comment', loginAuth, blogController.saveComment);
 
 
 

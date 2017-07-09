@@ -2,13 +2,9 @@
 
 
 
-<main>
-    <div class="jumbotron">
-        <h2>Login here</h2>
-        <p>Enter Login Credentials</p>
-    </div>
+
     <%if(typeof locals.errorMessage != 'undefined'){%><p class="alert alert-danger"><%=errorMessage%></p><%}%>
-    <div class="row">
+    <div class="container">
     	<form method="POST" action="/user/login">
 		  <div class="form-group">
 		    <label for="formGroupExampleInput">Username/Email</label>
@@ -22,4 +18,3 @@
 		  <button type="submit" class="btn btn-primary">Submit</button>
 		</form>
     </div>
-</main>

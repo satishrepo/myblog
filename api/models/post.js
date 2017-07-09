@@ -3,9 +3,9 @@ var mongoose = require('mongoose');
 
 var commentSchema = new mongoose.Schema({
 
-	comment_by : {type: mongoose.Schema.Types.ObjectId, ref : 'user', default: ''},
+	comment_by : [{type: mongoose.Schema.Types.ObjectId, ref : 'user', default: ''}],
 	text:{type: String, trim: true},
-	created_at: {type: String }
+	created_at: {type: Date, default: Date.now}
 });
 
 var postSchema = new mongoose.Schema({
