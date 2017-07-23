@@ -26,6 +26,12 @@ router.get('/detail/:username?', userController.getUserDetail);
 
 router.get('*', function(req, res)
 {
+	res.set({
+	  'Content-Type': 'text/plain',
+	  'Content-Length': '123',
+	  'ETag': '12345'
+	})
+
 	res.render('nopage');
 });
 

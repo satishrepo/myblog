@@ -73,6 +73,7 @@ var user = {
 
 	getUser : function(req, res)
 	{
+		
 		var userid = req.session.userid;
 
 		userService.getUserById(userid, function(response)
